@@ -116,7 +116,7 @@ The application uses caching to improve performance. You can customize the cachi
 ### Optional Improvements
 
 - **Database Migrations:** Using Flyway for database migrations.
-- **API Documentation:** Using Springfox Swagger for API documentation.
+- **API Documentation:** Using Swagger for API documentation.
 - **Security:** Implemented basic security using Spring Security.
 - **Message Broker Integration:** Kafka producer/consumer integration.
 - **Docker:** Dockerized application for easy deployment.

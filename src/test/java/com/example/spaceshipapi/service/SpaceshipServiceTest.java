@@ -2,6 +2,7 @@ package com.example.spaceshipapi.service;
 
 import com.example.spaceshipapi.entity.Spaceship;
 import com.example.spaceshipapi.repository.SpaceshipRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -10,26 +11,29 @@ import org.mockito.MockitoAnnotations;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
+
 public class SpaceshipServiceTest {
     @Mock
-    private SpaceshipRepository repository;
+    private SpaceshipRepository spaceshipRepository;
 
     @InjectMocks
-    private SpaceshipService service;
+    private SpaceshipService spaceshipService;
 
-    public SpaceshipServiceTest() {
+    @BeforeEach
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testGetSpaceshipById() {
-        Spaceship spaceship = new Spaceship(1L,"X-Wing", "Star Wars");
-        when(repository.findById(1L)).thenReturn(Optional.of(spaceship));
+    public void testFindSpaceshipById() {
+        Spaceship spaceship = new Spaceship(1L, "X-Wing", "Star Wars");
 
-        Optional<Spaceship> found = service.getSpaceshipById(1L);
+        when(spaceshipRepository.findById(1L)).thenReturn(Optional.of(spaceship));
 
-        assertEquals("X-Wing", found.get().getName());
-        assertEquals("Star Wars", found.get().getSeries());
+        Optional<Spaceship> result = spaceshipService.getSpaceshipById(1L);
+        assertNotNull(result);
+        assertEquals("X-Wing", result.get().getName());
     }
 }

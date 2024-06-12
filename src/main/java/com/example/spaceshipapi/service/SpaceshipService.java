@@ -14,31 +14,40 @@ import java.util.Optional;
 @Service
 public class SpaceshipService {
     @Autowired
-    private SpaceshipRepository repository;
+    private SpaceshipRepository spaceshipRepository;
 
     public Page<Spaceship> getAllSpaceships(Pageable pageable) {
-        return repository.findAll(pageable);
+        return spaceshipRepository.findAll(pageable);
     }
 
     @Cacheable("spaceship")
     public Optional<Spaceship> getSpaceshipById(Long id) {
-        return repository.findById(id);
+        return spaceshipRepository.findById(id);
     }
 
     public List<Spaceship> getSpaceshipsByName(String name) {
-        return repository.findByNameContainingIgnoreCase(name);
+        return spaceshipRepository.findByNameContainingIgnoreCase(name);
     }
 
     public Spaceship createSpaceship(Spaceship spaceship) {
-        return repository.save(spaceship);
+        return spaceshipRepository.save(spaceship);
     }
 
-    public Spaceship updateSpaceship(Long id, Spaceship spaceship) {
-        spaceship.setId(id);
-        return repository.save(spaceship);
+    public Optional<Spaceship> updateSpaceship(Long id, Spaceship spaceshipDetails) {
+        return spaceshipRepository.findById(id)
+                .map(spaceship -> {
+                    spaceship.setName(spaceshipDetails.getName());
+                    spaceship.setSeries(spaceshipDetails.getSeries());
+                    return spaceshipRepository.save(spaceship);
+                });
     }
 
-    public void deleteSpaceship(Long id) {
-        repository.deleteById(id);
+
+    public boolean deleteSpaceship(Long id) {
+        return spaceshipRepository.findById(id)
+                .map(spaceship -> {
+                    spaceshipRepository.delete(spaceship);
+                    return true;
+                }).orElse(false);
     }
 }
