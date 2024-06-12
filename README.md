@@ -13,13 +13,6 @@ A Spring Boot application for CRUD maintenance of spaceships from series and mov
 
 ## Getting Started
 
-### Prerequisites
-
-Ensure you have the following installed:
-- Java 17
-- Maven 3.6+
-- Docker (optional)
-
 ### Project Setup
 
 1. **Clone the repository:**
