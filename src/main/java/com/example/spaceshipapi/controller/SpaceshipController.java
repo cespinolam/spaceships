@@ -1,6 +1,7 @@
 package com.example.spaceshipapi.controller;
 
 import com.example.spaceshipapi.entity.Spaceship;
+import com.example.spaceshipapi.service.KafkaProducerService;
 import com.example.spaceshipapi.service.SpaceshipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,6 +20,9 @@ public class SpaceshipController {
 
     @Autowired
     private SpaceshipService spaceshipService;
+
+    @Autowired
+    private KafkaProducerService kafkaProducerService;
 
     @GetMapping
     public Page<Spaceship> getAllSpaceships(@RequestParam(defaultValue = "0") int page,
@@ -57,5 +61,11 @@ public class SpaceshipController {
         return spaceshipService.deleteSpaceship(id)
                 ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/publish")
+    public ResponseEntity<String> sendMessageToKafkaTopic(@RequestParam String topic, @RequestBody Object payload) {
+        kafkaProducerService.sendMessage(topic, payload);
+        return new ResponseEntity<>("Message sent to Kafka topic", HttpStatus.OK);
     }
 }
